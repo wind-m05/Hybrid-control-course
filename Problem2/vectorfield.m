@@ -1,0 +1,25 @@
+clear all
+close all
+
+%% Calculation of Vectorfields in different modes
+dx = 0.1;
+% Right halve, x1 >= 0
+[xp11,xp12] = meshgrid(0:dx:1.5, -1.5:dx:1.5);
+p11 = -xp11 + xp12 -1;
+p12 = -2*xp12;
+% Left halve, x1 < 0
+[xp21,xp22] = meshgrid(-1.5:dx:0, -1.5:dx:1.5);
+p21 = -xp21 + xp22 +1;
+p22 = 2*xp22;
+
+% Plotting of the vector fields
+figure
+quiver(xp11,xp12,p11,p12,'r-')
+hold on    
+quiver(xp21,xp22,p21,p22,'k-')
+grid on
+title('Vectorfield mode 2')
+xlabel('x_1')
+ylabel('x_2')
+xlim([-1.5 1.5])
+ylim([-1.5 1.5])
