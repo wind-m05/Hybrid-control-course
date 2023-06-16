@@ -66,7 +66,7 @@ L = Lf1 + Lf2 + Lf3 + Lf4 + ...
     Lpos;
 
 % solve the LMI using SDPT3:
-opts = sdpsettings('solver','sedumi','verbose',0);
+opts = sdpsettings('solver','sdpt3','verbose',0);
 diagnostics = optimize(L,[],opts);
 disp(diagnostics.info)
 if diagnostics.problem == 0
@@ -88,3 +88,9 @@ if posDefPs == 1
 else
     disp('Godverdeteringkutzooi der gaat iets mis')
 end
+
+%%
+P1 = value(Pvar1);
+P2 = value(Pvar2);
+P3 = value(Pvar3);
+P4 = value(Pvar4);
