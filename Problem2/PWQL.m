@@ -65,8 +65,8 @@ L = Lf1 + Lf2 + Lf3 + Lf4 + ...
     Lc12 + Lc14 + Lc21 + Lc23 + Lc32 + Lc34 + Lc41 + Lc43 +...
     Lpos;
 
-%solve the LMI using SDPT3:
-opts = sdpsettings('solver','sdpt3');
+% solve the LMI using SDPT3:
+opts = sdpsettings('solver','sedumi','verbose',0);
 diagnostics = optimize(L,[],opts);
 disp(diagnostics.info)
 if diagnostics.problem == 0
@@ -75,4 +75,16 @@ elseif diagnostics.problem == 1
  disp('Infeasible')
 else
  disp('Something else happened')
+end
+
+% Check conditions
+posDefPs = ...
+all(eig(value(Pvar1 - E1'*Wvar1*E1)) > 0) && ...
+all(eig(value(Pvar2 - E2'*Wvar2*E2)) > 0) && ...
+all(eig(value(Pvar3 - E3'*Wvar3*E3)) > 0) && ...
+all(eig(value(Pvar4 - E4'*Wvar4*E4)) > 0);
+if posDefPs == 1
+    disp('All P''s are positive definite in their region')
+else
+    disp('Godverdeteringkutzooi der gaat iets mis')
 end
