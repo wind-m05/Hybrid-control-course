@@ -12,8 +12,8 @@ Pvar = sdpvar(3,3); % symmetric by default
 
 %% Search for a common quadratic Lyapunov function
 % Lyapunov condition:
-Lf1 = A1'*Pvar+Pvar*A1 <= -1e-9;
-Lf2 = A2'*Pvar+Pvar*A2 <= -1e-9;
+Lf1 = A1'*Pvar+Pvar*A1 <= -1e-1;
+Lf2 = A2'*Pvar+Pvar*A2 <= -1e-1;
 
 Lp = Pvar >= 1e-9;
 
@@ -22,7 +22,7 @@ Lp = Pvar >= 1e-9;
 L = [Lf1,Lf2,Lp]; 
 
 % solve the LMI using SDPT3:
-opts = sdpsettings('solver','sdpt3');
+opts = sdpsettings('solver','mosek');
 diagnostics = optimize(L,[],opts);
 disp(diagnostics.info)
 if diagnostics.problem == 0
