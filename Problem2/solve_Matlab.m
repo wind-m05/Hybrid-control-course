@@ -9,15 +9,15 @@ A1 = [2 4; 0 -1];
 A2 = [-4 -7; 4 -5];
 
 %% Initial conditions and timespan
-% x0 = [0 1.5; 0 -1.5; 1.5 0; -1 2.5; 2 2; -0.5 2; -0.2 1.1; 5 0; -1.5 2.5]';
-x0 = [1 2]';
+x0 = [0 1.5; 0 -1.5; 1.5 0; -1 2.5; 2 2; -0.5 2; -0.2 1.1; 5 0; -1.5 2.5]';
+x0 = [2 2]';
 TimeSpan = [0 1]; % The timespan should be small, for example [0 1].
 
 bound.x1 = -3:0.1:3;
 bound.x2 = bound.x1.^2 + 1;
 
 %% ODE
-options = odeset('RelTol',1e-1,'AbsTol',1e-1,'MaxStep',0.01);
+options = odeset('RelTol',1e-1,'AbsTol',1e-1,'MaxStep',0.001);
 
 for i = 1:size(x0,2)
     [T,X] = ode45(@fun_Matlab_lambda,TimeSpan,x0(:,i),options);
@@ -46,7 +46,7 @@ xlim([-2 2])
 ylim([-1 3])
 xlabel('$x_1$')
 ylabel('$x_2$')
-legend('Switching plane','Solutions','interpreter','latex')
+legend('Switching plane','Solution','interpreter','latex')
 
 %% Plot with regions
 x1_plot = -2:0.01:2;
