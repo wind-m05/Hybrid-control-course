@@ -17,7 +17,7 @@ end
 figure
 hold on
 for i = 1:length(alpha)
-    plot(eig(As(:,:,i)),'ro')
+    plot(eig(As(:,:,i)),'o')
 end
 xlim([-1,1])
 ylim([-3,3])
