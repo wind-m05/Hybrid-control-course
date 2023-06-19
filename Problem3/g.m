@@ -11,7 +11,7 @@ Q = 0.1*eye(2); % Matrix related to the decrease rate
 D = 0.1*eye(2);
 % Define the constraints
 Lp = Pvar >= 1e-9;
-% Lu = Pvar <= 100;    % positive definiteness of P
+% Lu = Pvar <= 100;    % positive definiteness of  P
 Lf = A'*Pvar+Pvar*A <= 0;
 Lj = R'*Pvar*R-Pvar <= 0;
 L = [Lp,Lf,Lj];                    % combine LMIs
@@ -20,7 +20,7 @@ L = [Lp,Lf,Lj];                    % combine LMIs
 
 % Solving the LMI conditions with SDPT3: optimize() creates the correct
 % arguments and calls the SDPT3 solver to obtain the solution.
-opts = sdpsettings('solver','mosek');
+opts = sdpsettings('solver','sedumi ');
 diagnostics = optimize(L,[],opts);
 disp(diagnostics.info)
 if diagnostics.problem == 0
