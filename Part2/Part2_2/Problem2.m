@@ -53,4 +53,11 @@ disp(eig(Z - (Z*A1' + Y1'*B1')*P*(A1*Z + B1*Y1)));
 disp(eig(Z - (Z*A2' + Y2'*B2')*P*(A2*Z + B2*Y2)));
 
 %% b
-clc
+% W = sym('W',[2 2]);
+% obsv  = A1'*W*A1 - W + C1'*C1 == 0;
+% obsvCheck = solve(obsv,W);
+% Wresult = [double(obsvCheck.W1_1) double(obsvCheck.W1_2); double(obsvCheck.W2_1) double(obsvCheck.W2_2)];
+% eig(Wresult)
+O1 = rref([C1; C1*A1]);
+O2 = rref([C2; C2*A2]);
+
