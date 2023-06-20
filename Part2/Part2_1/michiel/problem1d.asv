@@ -1,0 +1,34 @@
+close all; clc; clear 
+A1 = [1.6 2; -4 -1.8];
+A2 = [-1.8 4; -2 1.6];
+P = sdpvar(2,2);
+Lp = P >= 0;
+%% grid search for theta
+theta = 1.5:0.1:2;
+
+%% Fix tau1 and tau2 
+for i = 1:length(theta)
+tau1_l = 0.15;
+tau1_h = 0.2;
+tau2_l = 1.5;
+tau2_h = theta(i);
+Abarll = expm(A2*tau2_l) * expm(A1*tau1_l) 
+Abar2lh = expm(A2*tau2_l) * expm(A1*tau1_l);
+Abar3 = expm(A1*tau)
+Abar4 = expm(A1*tau)
+L1 = 
+Ldec = max(abs(eig(expm(A1*tau1)*expm(A2*tau2)))) -0.99999 <=0; 
+L = Lp+Ldec;
+
+opts = sdpsettings('solver','mosek');
+diagnostics = optimize(L,[],opts);
+disp(diagnostics.info)
+if diagnostics.problem == 0
+    disp('Feasible')
+elseif diagnostics.problem == 1
+    disp('Infeasible')
+else
+    disp('Something else happened')
+end
+
+end
