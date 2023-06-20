@@ -116,3 +116,40 @@ disp(eig(P2 - (A2' - C2'*L2')*inv(P2)*(A2 - L2*C2)));
 % Closed loop system with controller from (a) and observer from (b)
 Acls1 = [(A1 + B1*K1) -B1*K1; zeros(nx,nx) (A1 - L1*C1)];
 Acls2 = [(A2 + B2*K2) -B2*K2; zeros(nx,nx) (A2 - L2*C2)];
+
+% LMI Variables
+Pcls1var = sdpvar(4,4);
+Pcls2var = sdpvar(4,4);
+
+% Conditions
+Lp1 = Pcls1var >= 1e-9;
+Lp2 = Pcls2var >= 1e-9;
+% Lf11 = Acls1'*Pcls1var*Acls1 - Pcls1var <= 0;
+% Lf12 = Acls1'*Pcls2var*Acls1 - Pcls1var <= 0;
+% Lf21 = Acls2'*Pcls1var*Acls2 - Pcls2var <= 0;
+% Lf22 = Acls2'*Pcls2var*Acls2 - Pcls2var <= 0;
+Lf11 = [Pcls1var Acls1'*Pcls1var; Pcls1var*Acls1 Pcls1var] >= 0;
+Lf12 = [Pcls1var Acls1'*Pcls2var; Pcls2var*Acls1 Pcls2var] >= 0;
+Lf21 = [Pcls2var Acls2'*Pcls1var; Pcls1var*Acls2 Pcls1var] >= 0;
+Lf22 = [Pcls2var Acls2'*Pcls2var; Pcls2var*Acls2 Pcls2var] >= 0;
+L = [Lf11,Lf12,Lf21,Lf22,Lp1,Lp2]; 
+
+% Solve
+opts = sdpsettings('solver','sdpt3');
+diagnostics = optimize(L,[],opts);
+disp(diagnostics.info)
+if diagnostics.problem == 0
+ disp('Feasible')
+elseif diagnostics.problem == 1
+ disp('Infeasible')
+else
+ disp('Something else happened')
+end
+
+check(L)
+
+Pcls1 = value(Pcls1var);
+eig(Pcls1)
+Pcls2 = value(Pcls2var);
+eig(Pcls2)
+
