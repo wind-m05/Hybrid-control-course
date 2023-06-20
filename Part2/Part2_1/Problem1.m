@@ -14,16 +14,16 @@ for i = 1:length(alpha)
     As(:,:,i) = alpha(i)*A1 + (1-alpha(i))*A2;
 end
 
-% figure
-% hold on
-% for i = 1:length(alpha)
-%     plot(eig(As(:,:,i)),'ro')
-% end
-% xlim([-1,1])
-% ylim([-3,3])
-% grid on
+figure
+hold on
+for i = 1:length(alpha)
+    plot(eig(As(:,:,i)),'ro')
+end
+xlim([-1,1])
+ylim([-3,3])
+grid on
 
-% c
+%% c
 tau1 = 0:0.1:1.5;
 tau2 = tau1;
 
