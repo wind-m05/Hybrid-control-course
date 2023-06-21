@@ -4,21 +4,26 @@ A2 = [-1.8 4; -2 1.6];
 P = sdpvar(2,2);
 Lp = P >= 0;
 %% grid search for theta
-theta = 1.5:0.1:2;
+theta = 1.5:0.01:2;
 
 %% Fix tau1 and tau2 
+Phist = cell(length(theta),1);
 for i = 1:length(theta)
 tau1_l = 0.15;
 tau1_h = 0.2;
 tau2_l = 1.5;
 tau2_h = theta(i);
-Abarll = expm(A2*tau2_l) * expm(A1*tau1_l) 
-Abar2lh = expm(A2*tau2_l) * expm(A1*tau1_l);
-Abar3 = expm(A1*tau)
-Abar4 = expm(A1*tau)
-L1 = 
-Ldec = max(abs(eig(expm(A1*tau1)*expm(A2*tau2)))) -0.99999 <=0; 
-L = Lp+Ldec;
+Abarll = expm(A2*tau2_l) * expm(A1*tau1_l);
+Abarlh = expm(A2*tau2_l) * expm(A1*tau1_h);
+Abarhl = expm(A2*tau2_h) * expm(A1*tau1_l);
+Abarhh = expm(A2*tau2_h) * expm(A1*tau1_h);
+
+Lll = Abarll'*P*Abarll-P <=0;
+Llh = Abarlh'*P*Abarlh-P <=0;
+Lhl = Abarlh'*P*Abarhl-P <=0;
+Lhh = Abarhh'*P*Abarhh-P <=0;
+Lp = P >=1e-9;
+L = Lll+Llh+Lhl+Lhh+Lp;
 
 opts = sdpsettings('solver','mosek');
 diagnostics = optimize(L,[],opts);
@@ -30,5 +35,16 @@ elseif diagnostics.problem == 1
 else
     disp('Something else happened')
 end
+Phist{i} = value(P);
+end
 
+defcheck = zeros(length(theta),1);
+for i = 1:length(theta)
+    P = Phist{i};
+    eigP = eig(P);
+    if eigP(1) > 1 && eigP(2) > 0
+    defcheck(i) = 1;
+    else
+    defcheck(i) = 0;
+    end
 end

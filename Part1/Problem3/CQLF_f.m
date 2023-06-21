@@ -22,16 +22,16 @@ Lp = Pvar >= 1e-9;
 L = [Lf1,Lf2,Lp]; 
 
 % solve the LMI using SDPT3:
-opts = sdpsettings('solver','mosek');
-diagnostics = optimize(L,[],opts);
-disp(diagnostics.info)
-if diagnostics.problem == 0
- disp('Feasible')
-elseif diagnostics.problem == 1
- disp('Infeasible')
-else
- disp('Something else happened')
-end
+opts = sdpsettings('solver','mosek','verbose',0);
+optimize(L,[],opts);
+% disp(diagnostics.info)
+% if diagnostics.problem == 0
+%  disp('Feasible')
+% elseif diagnostics.problem == 1
+%  disp('Infeasible')
+% else
+%  disp('Something else happened')
+% end
 
 P = value(Pvar)
 eigP = eig(P)
