@@ -1,7 +1,6 @@
 clear
 close all
 clc
-yalmip clear
 
 %% Dynamics
 A1 = [1/2 1/2; -1/4 5/4];
@@ -44,20 +43,14 @@ check(L)
 % Results
 Z = value(Zvar);
 P = Z\eye(nx); % faster than inv(Z)
-% disp(eig(P))
+disp(eig(P))
 
 X1 = value(X1var);
 X2 = value(X2var);
 K1 = X1*P;
 K2 = X2*P;
-A1bar = A1+B1*K1;
-A2bar = A2+B2*K2;
-% Must be negative definite
-disp(eig(A1bar'*P*A1bar-P));
-disp(eig(A2bar'*P*A2bar-P));
-% Must be within the unit disk
-disp(eig(A1 + B1*K1));
-disp(eig(A2 + B2*K2));
+% disp(eig(Z - (Z*A1' + X1'*B1')*P*(A1*Z + B1*X1)));
+% disp(eig(Z - (Z*A2' + X2'*B2')*P*(A2*Z + B2*X2)));
 
 %% b Common QLF
 % observability
