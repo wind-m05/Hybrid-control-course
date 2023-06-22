@@ -3,7 +3,7 @@ close all
 clc
 
 %% Dynamics
-A1 = [1/2 1/2; -1/4 -5/4];
+A1 = [1/2 1/2; -1/4 5/4];
 A2 = [5/6 5/3; -2/3  1/6];
 B1 = [ 0; 3];
 B2 = [-2; 1];
@@ -25,7 +25,7 @@ Lf2 = [Zvar (Zvar*A2' + X2var'*B2'); (A2*Zvar + B2*X2var) Zvar] >= 1e-9;
 L = [Lf1,Lf2,Lp]; 
 
 % Solve
-opts = sdpsettings('solver','sdpt3');
+opts = sdpsettings('solver','mosek');
 diagnostics = optimize(L,[],opts);
 disp(diagnostics.info)
 if diagnostics.problem == 0
