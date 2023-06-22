@@ -25,8 +25,8 @@ ylim([-3,3])
 grid on
 
 %% c
-tau1 = 0:0.01:1.5;
-tau2 = 0:0.01:1.5;
+tau1 = 0:0.01:15;
+tau2 = 0:0.01:15;
 
 stabAk = zeros(length(tau1),length(tau2),1);
 for p = 1:length(tau1)
@@ -37,7 +37,8 @@ for p = 1:length(tau1)
         if abs(eigAk(1)) < 1 && abs(eigAk(2)) < 1
             stabAk(p,q,:) = 1; % Schur stable
         else
-            stabAk(p,q,:) = 0; % unstable
+            stabAk(p,q,:) = 0; 
+            % unstable
         end
     end
 end
@@ -52,6 +53,6 @@ colormap(map)
 colorbar('Ticks',[0 0.25 0.5 0.75 1],'TickLabels',{'','Unstable','','Stable'.''},'TickLabelInterpreter','latex')
 xlabel('Time in mode 1 $\tau_1$ [time units]')
 ylabel('Time in mode 2 $\tau_2$ [time units]')
-xlim([0 1.5])
-ylim([0 1.5])
+% xlim([0 1.5])
+% ylim([0 1.5])
 
