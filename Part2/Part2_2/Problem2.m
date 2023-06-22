@@ -20,8 +20,8 @@ X2var = sdpvar(1,2);
 
 % Conditions
 Lp = Zvar >= 1e-9;
-Lf1 = [Zvar (Zvar*A1' + X1var'*B1'); (A1*Zvar + B1*X1var) Zvar] >= 0;
-Lf2 = [Zvar (Zvar*A2' + X2var'*B2'); (A2*Zvar + B2*X2var) Zvar] >= 0;
+Lf1 = [Zvar (Zvar*A1' + X1var'*B1'); (A1*Zvar + B1*X1var) Zvar] >= 1e-9;
+Lf2 = [Zvar (Zvar*A2' + X2var'*B2'); (A2*Zvar + B2*X2var) Zvar] >= 1e-9;
 L = [Lf1,Lf2,Lp]; 
 
 % Solve
@@ -38,7 +38,7 @@ end
 
 check(L)
 
-pause(1)
+% pause(1)
 
 % Results
 Z = value(Zvar);
@@ -73,10 +73,10 @@ Y22var = sdpvar(2,1);
 % Conditions
 Lp1 = P1var >= 1e-9;
 Lp2 = P2var >= 1e-9;
-Lf11 = [P1var (A1'*P1var - C1'*Y11var'); (P1var*A1 - Y11var*C1) P1var] >= 0;
-Lf12 = [P1var (A1'*P2var - C1'*Y12var'); (P2var*A1 - Y12var*C1) P2var] >= 0;
-Lf21 = [P2var (A2'*P1var - C2'*Y21var'); (P1var*A2 - Y21var*C2) P1var] >= 0;
-Lf22 = [P2var (A2'*P2var - C2'*Y22var'); (P2var*A2 - Y22var*C2) P2var] >= 0;
+Lf11 = [P1var (A1'*P1var - C1'*Y11var'); (P1var*A1 - Y11var*C1) P1var] >= 1e-9;
+Lf12 = [P1var (A1'*P2var - C1'*Y12var'); (P2var*A1 - Y12var*C1) P2var] >= 1e-9;
+Lf21 = [P2var (A2'*P1var - C2'*Y21var'); (P1var*A2 - Y21var*C2) P1var] >= 1e-9;
+Lf22 = [P2var (A2'*P2var - C2'*Y22var'); (P2var*A2 - Y22var*C2) P2var] >= 1e-9;
 L = [Lf11,Lf12,Lf21,Lf22,Lp1,Lp2]; 
 
 % Solve
@@ -93,7 +93,7 @@ end
 
 check(L)
 
-pause(1)
+% pause(1)
 
 % Results
 P1 = value(P1var);
@@ -112,7 +112,7 @@ disp(eig(P1 - (A1' - C1'*L1')*inv(P2)*(A1 - L1*C1)));
 disp(eig(P2 - (A2' - C2'*L2')*inv(P1)*(A2 - L2*C2)));
 disp(eig(P2 - (A2' - C2'*L2')*inv(P2)*(A2 - L2*C2)));
 
-%% c
+%% d
 % Closed loop system with controller from (a) and observer from (b)
 Acls1 = [(A1 + B1*K1) -B1*K1; zeros(nx,nx) (A1 - L1*C1)];
 Acls2 = [(A2 + B2*K2) -B2*K2; zeros(nx,nx) (A2 - L2*C2)];
@@ -124,10 +124,10 @@ Pcls2var = sdpvar(4,4);
 % Conditions
 Lp1 = Pcls1var >= 1e-9;
 Lp2 = Pcls2var >= 1e-9;
-Lf11 = Acls1'*Pcls1var*Acls1 - Pcls1var <= 0;
-Lf12 = Acls1'*Pcls2var*Acls1 - Pcls1var <= 0;
-Lf21 = Acls2'*Pcls1var*Acls2 - Pcls2var <= 0;
-Lf22 = Acls2'*Pcls2var*Acls2 - Pcls2var <= 0;
+Lf11 = Acls1'*Pcls1var*Acls1 - Pcls1var <= -1e-9;
+Lf12 = Acls1'*Pcls2var*Acls1 - Pcls1var <= -1e-9;
+Lf21 = Acls2'*Pcls1var*Acls2 - Pcls2var <= -1e-9;
+Lf22 = Acls2'*Pcls2var*Acls2 - Pcls2var <= -1e-9;
 % Lf11 = [Pcls1var Acls1'*Pcls1var; Pcls1var*Acls1 Pcls1var] >= 0;
 % Lf12 = [Pcls1var Acls1'*Pcls2var; Pcls2var*Acls1 Pcls2var] >= 0;
 % Lf21 = [Pcls2var Acls2'*Pcls1var; Pcls1var*Acls2 Pcls1var] >= 0;
