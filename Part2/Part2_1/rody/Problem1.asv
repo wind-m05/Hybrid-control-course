@@ -59,14 +59,8 @@ if epsUnstable ~= 0 && alphaUnstable ~= 0
 end
 
 figure; hold on
-plot(eps,modEigPlot(:,1),'color',[0.9 0.1 0.1],'LineWidth',1.2)
-plot(eps,modEigPlot(:,2),'--','color',[0.05 0.7 0.05],'LineWidth',1.2)
-grid on
-xlim([0 1])
-ylim([0 3.5])
-legend('$|\lambda_1|$','$|\lambda_2|$','interpreter','latex','location','northwest')
-xlabel('Periodic switching time $\varepsilon$ [time unit]')
-ylabel('Modulus of eigenvalues $\lambda_i$ [-]')
+plot(eps,modEigPlot(:,1),'color',[0.9 0.1 0.1])
+plot(eps,modEigPlot(:,2),'color',[])
 
 %% c
 tau1 = 0:0.01:1.5;
