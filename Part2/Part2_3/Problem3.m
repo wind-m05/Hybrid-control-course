@@ -30,12 +30,15 @@ for i = 1:length(x_i)
     e_i(i) = -Cp*[x_i(i,1); x_i(i,2)] + Dp*r;
 end
 
+e_trigger = t(e<1e-3);
+e_trigger = e_trigger(1);
+
 %%
 figure
 subplot(4,1,1)
 plot(t,x(:,1)); grid on; hold on
 plot(t_i,x_i(:,1))
-xline(1.6195,'--')
+xline(e_trigger,'--')
 xlim([0 25])
 ylim([-1.5 2.5])
 ylabel('$x_{p,1}(t)$')
@@ -44,14 +47,14 @@ legend('SPAN','LTI integrator','interpreter','latex')
 subplot(4,1,2)
 plot(t,x(:,2)); grid on; hold on
 plot(t_i,x_i(:,2))
-xline(1.6195,'--')
+xline(e_trigger,'--')
 xlim([0 25])
 ylabel('$x_{p,2}(t)$')
 
 subplot(4,1,3)
 plot(t,x(:,3)); grid on; hold on
 plot(t_i,x_i(:,3))
-xline(1.6195,'--')
+xline(e_trigger,'--')
 xlim([0 25])
 ylim([-1.5 1.5])
 ylabel('$x_{1}(t)$')
@@ -59,7 +62,7 @@ ylabel('$x_{1}(t)$')
 subplot(4,1,4)
 plot(t,e); grid on; hold on
 plot(t_i,e_i)
-xline(1.6195,'--')
+xline(e_trigger,'--')
 xlim([0 25])
 ylabel('$e(t)$')
 xlabel('Time $t$ [s]')
