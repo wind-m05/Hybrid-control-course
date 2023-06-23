@@ -1,6 +1,7 @@
 clear
 close all
 clc
+set(0,'defaulttextInterpreter','latex')
 
 %% Parameters
 Ap = [-0.2 0; 1 0];
@@ -33,14 +34,14 @@ end
 e_trigger = t(e<1e-3);
 e_trigger = e_trigger(1);
 
-%%
+% Plot
 figure
 subplot(4,1,1)
 plot(t,x(:,1)); grid on; hold on
 plot(t_i,x_i(:,1))
 xline(e_trigger,'--')
 xlim([0 25])
-ylim([-1.5 2.5])
+% ylim([-1.5 2.5])
 ylabel('$x_{p,1}(t)$')
 legend('SPAN','LTI integrator','interpreter','latex')
 
@@ -49,6 +50,7 @@ plot(t,x(:,2)); grid on; hold on
 plot(t_i,x_i(:,2))
 xline(e_trigger,'--')
 xlim([0 25])
+% ylim([6 11])
 ylabel('$x_{p,2}(t)$')
 
 subplot(4,1,3)
@@ -56,7 +58,7 @@ plot(t,x(:,3)); grid on; hold on
 plot(t_i,x_i(:,3))
 xline(e_trigger,'--')
 xlim([0 25])
-ylim([-1.5 1.5])
+% ylim([-1.5 1.5])
 ylabel('$x_{1}(t)$')
 
 subplot(4,1,4)
@@ -64,5 +66,72 @@ plot(t,e); grid on; hold on
 plot(t_i,e_i)
 xline(e_trigger,'--')
 xlim([0 25])
+% ylim([-2 2])
 ylabel('$e(t)$')
 xlabel('Time $t$ [s]')
+
+%% c
+% Reference and disturbance are zero, so only A matrix in dynamics
+r = 0;
+d = 0;
+
+% [x1, xp2] = meshgrid(-5:0.1:5);
+% xp1 = -0.1*xp2;
+% 
+% figure
+% hold on
+% surf(xp1, xp2, x1,'EdgeColor','none','Facecolor',[0.9 0.1 0.1],'FaceAlpha',0.5)
+% % scatter3(x(:,1),x(:,2),x(:,3))
+% grid on
+% xlabel('xp1')
+% ylabel('xp2')
+% zlabel('x1')
+% xlim([-3 3])
+% ylim([-3 3])
+% zlim([-3 3])
+
+% Varying a NEEDS TO BE ADDED
+
+% Modes
+A1 = [Ap Bp; -Cp a];
+A2 = [Ap -Bp; -Cp a];
+
+% S procedure
+E1 = [1 0.1 0; 0 0 1];
+E2 = -E1;
+Z12 = [1; -10; 0];
+Z21 = Z12;
+
+% LMI variables
+Pvar1 = sdpvar(3,3);
+Pvar2 = sdpvar(3,3);
+Uvar1 = sdpvar(2,2);
+Uvar2 = sdpvar(2,2);
+Wvar1 = sdpvar(2,2);
+Wvar2 = sdpvar(2,2);
+
+% LMIs
+Lf1 = A1'*Pvar1 + Pvar1*A1 + E1'*Uvar1*E1 <= -1e-9;
+Lf2 = A2'*Pvar2 + Pvar2*A2 + E2'*Uvar2*E2 <= -1e-9;
+Lp1 = Pvar1 - E1'*Wvar1*E1 >= 1e-9;
+Lp2 = Pvar2 - E2'*Wvar2*E2 >= 1e-9;
+Lc12 = Z12'*(Pvar1 - Pvar2)*Z12 == 0;
+% Lc12g = Z12'*(Pvar1 - Pvar2)*Z12 >= -1e-7;
+% Lc12l = Z12'*(Pvar1 - Pvar2)*Z12 <= 1e-7;
+Lc21 = Z21'*(Pvar2 - Pvar1)*Z21 == 0;
+% Lc21g = Z21'*(Pvar2 - Pvar1)*Z21 >= -1e-7;
+% Lc21l = Z21'*(Pvar2 - Pvar1)*Z21 <= 1e-7;
+Lpos = [Uvar1(:)>=1e-9, Uvar2(:)>=1e-9, Wvar1(:)>=1e-9, Wvar2(:)>=1e-9];
+L = Lf1 + Lf2 + Lp1 + Lp2 + Lc12 + Lc21 + Lpos;
+% L = Lf1 + Lf2 + Lp1 + Lp2 + Lc12g + Lc12l + Lc21g + Lc21l + Lpos;
+
+opts = sdpsettings('solver','sdpt3');
+diagnostics = optimize(L,[],opts);
+disp(diagnostics.info)
+if diagnostics.problem == 0
+ disp('Feasible')
+elseif diagnostics.problem == 1
+ disp('Infeasible')
+else
+ disp('Something else happened')
+end
