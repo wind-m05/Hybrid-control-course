@@ -27,12 +27,12 @@ tau2_h = theta(i);
 % Abar4 = expm(A2*tau2_h) * expm(A1*tau1_h);
 
 
-% Theta = 2.720 if you only include Abar1 -> Abar2, theta = 2.5750 if you
-% include Abar1 -> Abar2
-Abar1 = expm(A2*tau2_h) * expm(A1*tau1_h) * expm(A2*tau2_l) * expm(A1*tau1_l);
-Abar2 = expm(A2*tau2_l) * expm(A1*tau1_h) * expm(A2*tau2_h) * expm(A1*tau1_l);
-Abar3 = expm(A2*tau2_l) * expm(A1*tau1_h) * expm(A2*tau2_l) * expm(A1*tau1_l);
-Abar4 = expm(A2*tau2_h) * expm(A1*tau1_h) * expm(A2*tau2_h) * expm(A1*tau1_l);
+% Theta = 2.720 if you only include Abar1 -> Abar4, 
+% theta = 2.595 if you include Abar5 -> Abar8
+Abar1 = expm(A2*tau2_h) * expm(A1*tau1_l) * expm(A2*tau2_l) * expm(A1*tau1_h);
+Abar2 = expm(A2*tau2_l) * expm(A1*tau1_l) * expm(A2*tau2_h) * expm(A1*tau1_h);
+Abar3 = expm(A2*tau2_l) * expm(A1*tau1_l) * expm(A2*tau2_l) * expm(A1*tau1_h);
+Abar4 = expm(A2*tau2_h) * expm(A1*tau1_l) * expm(A2*tau2_h) * expm(A1*tau1_h);
 
 Abar5 = expm(A1*tau1_l) * expm(A2*tau2_l) * expm(A1*tau1_h) * expm(A2*tau2_h);
 Abar6 = expm(A1*tau1_l) * expm(A2*tau2_h) * expm(A1*tau1_h) * expm(A2*tau2_l); 
