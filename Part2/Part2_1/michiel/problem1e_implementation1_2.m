@@ -27,24 +27,23 @@ tau2_h = theta(i);
 % Abar4 = expm(A2*tau2_h) * expm(A1*tau1_h);
 
 
-% Implementation 2 -> lead to higher theta values, from 2.67 -> 2.7800
-% When you start for tau_1_1 you get theta : 2.78000
-% When you start for tau1_2 you get theta : 2.7200
-% Abar1 = expm(A2*tau2_h) * expm(A1*tau1_h) * expm(A2*tau2_l) * expm(A1*tau1_l);
-% Abar2 = expm(A2*tau2_l) * expm(A1*tau1_h) * expm(A2*tau2_h) * expm(A1*tau1_l);
-% Abar3 = expm(A2*tau2_l) * expm(A1*tau1_h) * expm(A2*tau2_l) * expm(A1*tau1_l);
-% Abar4 = expm(A2*tau2_h) * expm(A1*tau1_h) * expm(A2*tau2_h) * expm(A1*tau1_l);
+% Theta = 2.720 if you only include Abar1 -> Abar2, theta = 2.5750 if you
+% include Abar1 -> Abar2
+Abar1 = expm(A2*tau2_h) * expm(A1*tau1_h) * expm(A2*tau2_l) * expm(A1*tau1_l);
+Abar2 = expm(A2*tau2_l) * expm(A1*tau1_h) * expm(A2*tau2_h) * expm(A1*tau1_l);
+Abar3 = expm(A2*tau2_l) * expm(A1*tau1_h) * expm(A2*tau2_l) * expm(A1*tau1_l);
+Abar4 = expm(A2*tau2_h) * expm(A1*tau1_h) * expm(A2*tau2_h) * expm(A1*tau1_l);
 
-Abar5 = expm(A2*tau2_h) * expm(A1*tau1_l) * expm(A2*tau2_l) * expm(A1*tau1_h);
-Abar6 = expm(A2*tau2_l) * expm(A1*tau1_l) * expm(A2*tau2_h) * expm(A1*tau1_h);
-Abar7 = expm(A2*tau2_l) * expm(A1*tau1_l) * expm(A2*tau2_l) * expm(A1*tau1_h);
-Abar8 = expm(A2*tau2_h) * expm(A1*tau1_l) * expm(A2*tau2_h) * expm(A1*tau1_h);
+Abar5 = expm(A1*tau1_l) * expm(A2*tau2_l) * expm(A1*tau1_h) * expm(A2*tau2_h);
+Abar6 = expm(A1*tau1_l) * expm(A2*tau2_h) * expm(A1*tau1_h) * expm(A2*tau2_l); 
+Abar7 = expm(A1*tau1_l) * expm(A2*tau2_l) * expm(A1*tau1_h) * expm(A2*tau2_l); 
+Abar8 = expm(A1*tau1_l) * expm(A2*tau2_h) * expm(A1*tau1_h) * expm(A2*tau2_h);
 
 
-% L1 = Abar1'*P*Abar1-P <=-1e9;
-% L2 = Abar2'*P*Abar2-P <=-1e9;
-% L3 = Abar3'*P*Abar3-P <=-1e9;
-% L4 = Abar4'*P*Abar4-P <=-1e9;
+L1 = Abar1'*P*Abar1-P <=-1e9;
+L2 = Abar2'*P*Abar2-P <=-1e9;
+L3 = Abar3'*P*Abar3-P <=-1e9;
+L4 = Abar4'*P*Abar4-P <=-1e9;
 
 L5 = Abar5'*P*Abar5-P <=-1e9;
 L6 = Abar6'*P*Abar6-P <=-1e9;
@@ -53,7 +52,7 @@ L8 = Abar8'*P*Abar8-P <=-1e9;
 
 
 Lp = P >=1e-9;
-L = L5+L6+L7+L8+Lp;
+L = L1+L2+L3+L4+L5+L6+L7+L8+Lp;
 
 opts = sdpsettings('solver','mosek','verbose',0);
 optimize(L,[],opts);

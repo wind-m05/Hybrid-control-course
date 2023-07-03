@@ -9,8 +9,9 @@ A1 = [2 4; 0 -1];
 A2 = [-4 -7; 4 -5];
 
 %% Initial conditions and timespan
-x0 = [0 1.5; 0 -1.5; 1.5 0; -1 2.5; 2 2; -0.5 2; -0.2 1.1; 5 0; -1.5 2.5]';
-x0 = [2 2]';
+xtest = -1
+x0 = [0 1.5; 0 -1.5; 1.5 0; -1 2.5; 2 2; -0.5 2; -0.2 1.1; 5 0; -1.5 2.5 ; xtest xtest^2+1]';
+% x0 = [2 2]';
 TimeSpan = [0 1]; % The timespan should be small, for example [0 1].
 
 bound.x1 = -3:0.1:3;
@@ -20,7 +21,7 @@ bound.x2 = bound.x1.^2 + 1;
 options = odeset('RelTol',1e-1,'AbsTol',1e-1,'MaxStep',0.001);
 
 for i = 1:size(x0,2)
-    [T,X] = ode45(@fun_Matlab_lambda,TimeSpan,x0(:,i),options);
+    [T,X] = ode45(@fun_Matlab,TimeSpan,x0(:,i),options);
     t{i} = T;
     x{i} = X;
 end
@@ -49,20 +50,20 @@ ylabel('$x_2$')
 legend('Switching plane','Solution','interpreter','latex')
 
 %% Plot with regions
-x1_plot = -2:0.01:2;
-
-figure
-hold on
-plot(bound.x1,bound.x2,'k--','linewidth',1.1)
-plot(x1_plot,2*x1_plot,'r')
-plot(x1_plot,-2*x1_plot,'r')
-text(-0.15,2.25,'1','FontSize',14,'EdgeColor','k')
-text( 1.25,0.25,'2','FontSize',14,'EdgeColor','k')
-text(-0.15,-0.75,'3','FontSize',14,'EdgeColor','k')
-text(-1.25,0.25,'4','FontSize',14,'EdgeColor','k')
-grid on
-xlim([-2 2])
-ylim([-1 3])
-xlabel('$x_1$')
-ylabel('$x_2$')
-legend('Switching plane','Region boundaries','interpreter','latex')
+% x1_plot = -2:0.01:2;
+% 
+% figure
+% hold on
+% plot(bound.x1,bound.x2,'k--','linewidth',1.1)
+% plot(x1_plot,2*x1_plot,'r')
+% plot(x1_plot,-2*x1_plot,'r')
+% text(-0.15,2.25,'1','FontSize',14,'EdgeColor','k')
+% text( 1.25,0.25,'2','FontSize',14,'EdgeColor','k')
+% text(-0.15,-0.75,'3','FontSize',14,'EdgeColor','k')
+% text(-1.25,0.25,'4','FontSize',14,'EdgeColor','k')
+% grid on
+% xlim([-2 2])
+% ylim([-1 3])
+% xlabel('$x_1$')
+% ylabel('$x_2$')
+% legend('Switching plane','Region boundaries','interpreter','latex')

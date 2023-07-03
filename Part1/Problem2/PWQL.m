@@ -66,7 +66,7 @@ L = Lf1 + Lf2 + Lf3 + Lf4 + ...
     Lpos;
 
 % solve the LMI using SDPT3:
-opts = sdpsettings('solver','sdpt3','verbose',0);
+opts = sdpsettings('solver','mosek','verbose',0);
 diagnostics = optimize(L,[],opts);
 disp(diagnostics.info)
 if diagnostics.problem == 0
@@ -86,7 +86,7 @@ all(eig(value(Pvar4 - E4'*Wvar4*E4)) > 0);
 if posDefPs == 1
     disp('All P''s are positive definite in their region')
 else
-    disp('Godverdeteringkutzooi der gaat iets mis')
+    disp('Something goes wrong')
 end
 
 %%
@@ -94,3 +94,23 @@ P1 = value(Pvar1);
 P2 = value(Pvar2);
 P3 = value(Pvar3);
 P4 = value(Pvar4);
+
+%% Plot lyapunov function 1
+x = linspace(-2,2);
+y = linspace(-2,2);
+[x,y] = meshgrid(x,y);
+V1 = x.^2*P1(1,1)+y*x'*P1(2,1) + x*y'*P1(1,2)+y.^2*P1(2,2);
+V2 = x.^2*P2(1,1)+y*x'*P2(2,1) + x*y'*P2(1,2)+y.^2*P2(2,2);
+V3 = x.^2*P3(1,1)+y*x'*P3(2,1) + x*y'*P3(1,2)+y.^2*P3(2,2);
+V4 = x.^2*P4(1,1)+y*x'*P4(2,1) + x*y'*P4(1,2)+y.^2*P4(2,2);
+mesh(x,y,V1)
+hold on
+mesh(x,y,V2)
+mesh(x,y,V3)
+mesh(x,y,V4)
+xlabel('x-axis')
+ylabel('y-axis')
+
+% Figure diff V1 and V3
+figure
+% mesh(x,y,V1-V3)
