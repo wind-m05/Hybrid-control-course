@@ -61,7 +61,7 @@ else
         % your final set of constraints to follow the syntax of this file.
         %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        options = sdpsettings('solver','sedumi','verbose',0);
+        options = sdpsettings('solver','mosek','verbose',0);
 %         P1var = sdpvar(3,3);
         P2var = sdpvar(3,3);
 %         Lf1 = [A1'*P1var+P1var*A1+sigma*P1var <= 0];

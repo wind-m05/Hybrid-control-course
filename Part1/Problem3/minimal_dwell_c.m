@@ -61,14 +61,15 @@ else
         % your final set of constraints to follow the syntax of this file.
         %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        options = sdpsettings('solver','sedumi');
-        P1var = sdpvar(3,3);
+        options = sdpsettings('solver','mosek');
+%         P1var = sdpvar(3,3);
         P2var = sdpvar(3,3);
-        Lf1 = [A1'*P1var+P1var*A1+sigma*P1var <= 0];
+%         Lf1 = [A1'*P1var+P1var*A1+sigma*P1var <= 0];
         Lf2 = [A2'*P2var+P2var*A2+sigma*P2var <= 0];
-        cP1 = [P1var >= alpha*I, P1var <= beta*I];
+%         cP1 = [P1var >= alpha*I, P1var <= beta*I];
         cP2 = [P2var >= alpha*I, P2var <= beta*I];
-        L = Lf1 + Lf2 +cP1 +cP2;
+%         L = Lf1 + Lf2 +cP1 +cP2;
+        L =  Lf2  + cP2;
         diagnostics = optimize(L,[],options); % solve the LMI problem
         
         % Check result
@@ -111,7 +112,7 @@ else
         
         % Store feasible solution
         if min(pres) > 0 && diagnostics.problem == 0
-            feasible.P1var = P1var;
+%             feasible.P1var = P1var;
             feasible.P2var = P2var;
             feasible.sigma = sigma;
         end
